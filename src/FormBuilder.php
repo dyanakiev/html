@@ -305,6 +305,8 @@ class FormBuilder
         $merge = compact('type', 'value', 'id');
 
         $options = array_merge($options, $merge);
+        
+        $options['autocomplete'] = 'new-'.$name.'_90999_'.time();
 
         return $this->toHtmlString('<input' . $this->html->attributes($options) . '>');
     }
