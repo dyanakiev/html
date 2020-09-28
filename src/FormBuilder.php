@@ -670,6 +670,16 @@ class FormBuilder
             $html[] = $this->getSelectOption($display, $value, $selected, $optionAttributes, $optgroupAttributes);
         }
 
+                $selectAttributes['autocomplete'] = 'new-'.$name.'_090_'.time();
+
+        if(!isset($selectAttributes['class'])) $selectAttributes['class'] = '';
+        $error_feedback = '';
+        if($this->request->session()->get('errors')) {
+            if($this->request->session()->get('errors')->has($name)) {
+                $selectAttributes['class'] = $selectAttributes['class'] . ' is-invalid';
+                $error_feedback = '<span class="invalid-feedback" role="alert"><strong>'.$this->request->session()->get('errors')->first($name).'</strong></span>';
+            }
+        }
         // Once we have all of this HTML, we can join this into a single element after
         // formatting the attributes into an HTML "attributes" string, then we will
         // build out a final select statement, which will contain all the values.
@@ -677,7 +687,7 @@ class FormBuilder
 
         $list = implode('', $html);
 
-        return $this->toHtmlString("<select{$selectAttributes}>{$list}</select>");
+        return $this->toHtmlString("<select{$selectAttributes}>{$list}</select>".$error_feedback);
     }
 
     /**
