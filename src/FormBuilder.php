@@ -306,9 +306,18 @@ class FormBuilder
 
         $options = array_merge($options, $merge);
         
-        $options['autocomplete'] = 'new-'.$name.'_90999_'.time();
+      $options['autocomplete'] = 'new-'.$name.'_090_'.time();
 
-        return $this->toHtmlString('<input' . $this->html->attributes($options) . '>');
+        if(!isset($options['class'])) $options['class'] = '';
+        $error_feedback = '';
+        if($this->request->session()->get('errors')) {
+            if($this->request->session()->get('errors')->has($name)) {
+                $options['class'] = $options['class'] . ' is-invalid';
+                $error_feedback = '<span class="invalid-feedback" role="alert"><strong>'.$this->request->session()->get('errors')->first($name).'</strong></span>';
+            }
+        }
+        
+        return $this->toHtmlString('<input' . $this->html->attributes($options) . '/>'.$error_feedback);
     }
 
     /**
