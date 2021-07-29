@@ -579,9 +579,19 @@ class FormBuilder
         // Next we will convert the attributes into a string form. Also we have removed
         // the size attribute, as it was merely a short-cut for the rows and cols on
         // the element. Then we'll create the final textarea elements HTML for us.
+        $options['autocomplete'] = 'new-'.$name.'_090_'.time();
+
+        if(!isset($options['class'])) $options['class'] = '';
+        $error_feedback = '';
+        if($this->request->session()->get('errors')) {
+            if($this->request->session()->get('errors')->has($name)) {
+                $options['class'] = $options['class'] . ' is-invalid';
+                $error_feedback = '<span class="invalid-feedback" role="alert"><strong>'.$this->request->session()->get('errors')->first($name).'</strong></span>';
+            }
+        }
         $options = $this->html->attributes($options);
 
-        return $this->toHtmlString('<textarea' . $options . '>' . e($value, false). '</textarea>');
+        return $this->toHtmlString('<textarea' . $options . '>' . e($value, false). '</textarea>'.$error_feedback);
     }
 
     /**
