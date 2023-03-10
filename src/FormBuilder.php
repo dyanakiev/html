@@ -306,7 +306,9 @@ class FormBuilder
 
         $options = array_merge($options, $merge);
         
-      $options['autocomplete'] = 'new-'.$name.'_090_'.time();
+        if(!isset($options['autocomplete'])) {
+            $options['autocomplete'] = 'new-'.$name.'_090_'.time();
+        }
 
         if(!isset($options['class'])) $options['class'] = '';
         $error_feedback = '';
